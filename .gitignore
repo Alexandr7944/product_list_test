@@ -1,0 +1,10 @@
+node_modules
+# настройки, вместо переменных среды окружения (.env)
+config
+# директория сборки
+build
+yarn-error.log*
+
+.snowpack
+# mac
+.DS_Store
