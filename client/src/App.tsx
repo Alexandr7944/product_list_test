@@ -1,31 +1,25 @@
 import {useState, useEffect, useMemo} from 'react'
 import './App.css'
-import {httpJson} from "./shared/api.ts";
 import {ProductList} from "./components/ProductList.tsx";
 import {SortingProducts} from "./components/SortingProducts.tsx";
-import type {NewProductInput, Product} from "./types/product.type.ts";
+import {useAppDispatch, useAppSelector} from "./hooks/hook.ts";
+import {fetchProducts} from "./store/thunks.ts";
 
 function App() {
-    const [products, setProducts] = useState<Product[]>([])
-    const [loading, setLoading] = useState<boolean>(false)
+    const dispatch = useAppDispatch();
     const [sortKey, setSortKey] = useState<'price' | 'rating' | null>(null)
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc')
 
-    useEffect(() => {
-        fetchProducts();
-    }, [])
 
-    async function fetchProducts() {
-        setLoading(true)
-        try {
-            const products = await httpJson<Product[]>('/products');
-            setProducts(products);
-        } catch (e) {
-            console.error('Не удалось загрузить товары', e);
-        } finally {
-            setLoading(false)
-        }
-    }
+    useEffect(() => {
+        const promise = dispatch(fetchProducts());
+        return () => {
+            promise.abort();
+        };
+    }, [dispatch]);
+
+    const products = useAppSelector(state => state.productList.list);
+    const loading = useAppSelector(state => state.productList.loading);
 
     const sortedProducts = useMemo(() => {
         const arr = [...products]
@@ -49,35 +43,6 @@ function App() {
         }
     }
 
-    const createProduct = async (data: NewProductInput) => {
-        const newProduct = await httpJson<Product>('/products', {
-            method: 'POST',
-            body: JSON.stringify(data),
-        });
-
-        if (newProduct)
-            await fetchProducts();
-    }
-
-    const updateProduct = async (data: NewProductInput & { id: number }) => {
-        const updatedProduct = await httpJson<Product>(`/products/${data.id}`, {
-            method: 'PUT',
-            body: JSON.stringify(data),
-        });
-
-        if (updatedProduct)
-            await fetchProducts();
-    }
-
-    const deleteProduct = async (id: number) => {
-        const deletedProduct = await httpJson<Product>(`/products/${id}`, {
-            method: 'DELETE',
-        });
-
-        if (deletedProduct)
-            setProducts(products.filter(p => p.id !== id))
-    }
-
     return (
         <div className="App app">
             <h1>Товары</h1>
@@ -93,9 +58,6 @@ function App() {
                     />
                     <ProductList
                         products={sortedProducts}
-                        onCreateProduct={createProduct}
-                        onUpdateProduct={updateProduct}
-                        onDeleteProduct={deleteProduct}
                     />
                 </>
             )}

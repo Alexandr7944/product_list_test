@@ -1,28 +1,29 @@
 import * as React from "react";
 import {AddProductModal} from "./AddProductModal";
-import type {NewProductInput, Product} from "../types/product.type.ts";
+import type {NewProductInput, Product} from "../types/product.type";
 import {EditProductModal} from "./editProductModal";
 import {useState} from "react";
+import {useAppDispatch} from "../hooks/hook";
+import {addProduct, deleteProduct, updateProduct} from "../store/thunks";
 
 type Props = {
     products: Product[];
-    onCreateProduct: (data: NewProductInput) => void;
-    onUpdateProduct: (data: NewProductInput & { id: number }) => void;
-    onDeleteProduct: (id: number) => void;
 };
 
-export const ProductList: React.FC<Props> = ({products, onCreateProduct, onUpdateProduct, onDeleteProduct}) => {
+export const ProductList: React.FC<Props> = ({products}) => {
+    const dispatch = useAppDispatch();
+
     const [open, setOpen] = useState(false);
     const [selectProduct, setSelectProduct] = useState<Product | null>(null);
 
     function handleSubmit(data: NewProductInput) {
-        onCreateProduct?.(data);
+        dispatch(addProduct(data))
         setOpen(false);
     }
 
     function handleDelete(event: React.MouseEvent<HTMLButtonElement, MouseEvent>, id: number) {
         event.stopPropagation();
-        onDeleteProduct(id);
+        dispatch(deleteProduct(id));
     }
 
     return (
@@ -68,6 +69,8 @@ export const ProductList: React.FC<Props> = ({products, onCreateProduct, onUpdat
                 ))}
             </div>
 
+
+
             <AddProductModal
                 open={open}
                 onClose={() => setOpen(false)}
@@ -80,7 +83,7 @@ export const ProductList: React.FC<Props> = ({products, onCreateProduct, onUpdat
                     product={selectProduct}
                     open={Boolean(selectProduct)}
                     onClose={() => setSelectProduct(null)}
-                    onSubmit={onUpdateProduct}
+                    onSubmit={item => dispatch(updateProduct(item))}
                 />
             }
         </div>
