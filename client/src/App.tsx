@@ -44,13 +44,12 @@ function App() {
     }
 
     return (
-        <div className="App app">
+        <div className="app">
             <h1>Товары</h1>
 
-            {loading ? (
-                <div className="loading">Загрузка...</div>
-            ) : (
-                <>
+            {loading
+                ? <div className="loading">Загрузка...</div>
+                : <>
                     <SortingProducts
                         handleSort={handleSort}
                         sortKey={sortKey}
@@ -60,7 +59,7 @@ function App() {
                         products={sortedProducts}
                     />
                 </>
-            )}
+            }
         </div>
     )
 }
