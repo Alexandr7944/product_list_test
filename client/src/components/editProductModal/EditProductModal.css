@@ -1,0 +1,134 @@
+/* Overlay */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+/* Dialog */
+.modal {
+  width: min(640px, calc(100vw - 32px));
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 20px 64px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+}
+
+/* Header */
+.modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid #eee;
+}
+
+.modal__title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.modal__close-btn {
+  border: none;
+  background: transparent;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 4px 8px;
+}
+
+/* Body */
+.modal__body {
+  padding: 16px;
+}
+
+/* Form layout */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px 16px;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-field--full {
+  grid-column: 1 / -1;
+}
+
+.form-field__label {
+  font-size: 13px;
+  color: #333;
+}
+
+.form-field__input {
+  border: 1px solid #dcdcdc;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 14px;
+  outline: none;
+  background: #fff;
+}
+
+.form-field__input:focus {
+  border-color: #8ab4f8;
+  box-shadow: 0 0 0 3px rgba(138, 180, 248, 0.25);
+}
+
+.form-field__textarea {
+  resize: vertical;
+  min-height: 96px;
+}
+
+.form-field__error {
+  color: #c0392b;
+  font-size: 12px;
+}
+
+/* Footer */
+.modal__footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 8px;
+  padding-top: 12px;
+  border-top: 1px solid #eee;
+}
+
+/* Buttons */
+.btn {
+  border: 1px solid #dcdcdc;
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 14px;
+  cursor: pointer;
+  background: #fafafa;
+}
+
+.btn--secondary:hover {
+  background: #f2f2f2;
+}
+
+.btn--primary {
+  background: #1f75fe;
+  border-color: #1f75fe;
+  color: #fff;
+}
+
+.btn--primary:hover {
+  background: #1666dd;
+}
+
+@media (max-width: 560px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}
