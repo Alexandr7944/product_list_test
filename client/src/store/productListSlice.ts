@@ -5,15 +5,13 @@ import {addProduct, deleteProduct, fetchProducts, updateProduct} from "./thunks.
 
 type ProductState = {
     list: Product[];
-    categories: string[];
-    loading: boolean;
+    isLoading: boolean;
     error?: string | null;
 };
 
 const initialState: ProductState = {
     list:       [],
-    categories: [],
-    loading:    false,
+    isLoading:    false,
     error:      null,
 };
 
@@ -25,7 +23,6 @@ const productSlice = createSlice({
         builder
             .addCase(fetchProducts.fulfilled, (state, action: PayloadAction<Product[]>) => {
                 state.list = action.payload;
-                state.categories = Array.from(new Set(action.payload.map(p => p.category))).sort();
             })
             .addCase(addProduct.fulfilled, (state, action: PayloadAction<NewProductInput>) => {
                 state.list.push(action.payload as Product);
@@ -44,21 +41,21 @@ const productSlice = createSlice({
             .addMatcher(
                 isPending(fetchProducts, addProduct, updateProduct, deleteProduct),
                 (state) => {
-                    state.loading = true;
+                    state.isLoading = true;
                     state.error = null;
                 }
             )
             .addMatcher(
                 isRejected(fetchProducts, addProduct, updateProduct, deleteProduct),
                 (state, action) => {
-                    state.loading = false;
+                    state.isLoading = false;
                     state.error = action.error?.message ?? "Unexpected error";
                 }
             )
             .addMatcher(
                 isFulfilled(fetchProducts, addProduct, updateProduct, deleteProduct),
                 (state) => {
-                    state.loading = false;
+                    state.isLoading = false;
                 }
             );
     },

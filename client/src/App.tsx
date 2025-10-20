@@ -19,7 +19,7 @@ function App() {
     }, [dispatch]);
 
     const products = useAppSelector(state => state.productList.list);
-    const loading = useAppSelector(state => state.productList.loading);
+    const isLoading = useAppSelector(state => state.productList.isLoading);
 
     const sortedProducts = useMemo(() => {
         const arr = [...products]
@@ -47,7 +47,7 @@ function App() {
         <div className="app">
             <h1>Товары</h1>
 
-            {loading
+            {isLoading
                 ? <div className="loading">Загрузка...</div>
                 : <>
                     <SortingProducts

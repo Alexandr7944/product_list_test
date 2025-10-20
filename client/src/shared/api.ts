@@ -1,6 +1,6 @@
 export function getBaseUrl(): string {
     const isProd = import.meta.env.MODE === "production";
-    const base = isProd ? import.meta.env.VITE_SERVER_PATH : import.meta.env.VITE_URL_DEV_API;
+    const base: string = isProd ? import.meta.env.VITE_SERVER_PATH : import.meta.env.VITE_URL_DEV_API;
     if (!base) {
         throw new Error("Base API URL is not configured. Set VITE_SERVER_PATH or VITE_URL_DEV_API.");
     }
